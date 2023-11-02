@@ -1,4 +1,4 @@
-version: "3.9"
+version: "2"
 
 services:
   app:
@@ -7,6 +7,7 @@ services:
     restart: always
     volumes:
       - static-data:/vol/web
+      - /home/ec2-user/pqBack/app/aws_keys.txt:/app/aws_keys.txt
     environment:
       - DB_HOST=db
       - DB_NAME=${DB_NAME}
