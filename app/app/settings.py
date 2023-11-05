@@ -20,18 +20,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
+SECRET_KEY = 'django-insecure-j7z1cr1xu#-%n2!b31z0d@)%69_0m0mo!lsa@(pcin--k0sb=y'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production! Change ALLOWED_HOSTS during production
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 ALLOWED_HOSTS.extend(
     filter(
         None,
         os.environ.get('ALLOWED_HOSTS', '').split(','),
     )
 )
+
 
 # Application definition
 
@@ -44,12 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'langchain',
+    'openai',
+    'channels',
+    'channels_redis',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_spectacular',
     'user',
-    'hdbflat',
-    'favouriteshdb',
     'corsheaders',
 ]
 
@@ -159,17 +162,15 @@ REST_FRAMEWORK = {
     ),
 }
 
-SPECTACULAR_SETTINGS = {
-    'COMPONENT_SPLIT_REQUEST': True,
-}
-
 CSRF_COOKIE_NAME = 'csrftoken'
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:3001",
     "http://localhost:3001",
     "http://127.0.0.1:3000",
     "http://localhost:3000",
+    "http://127.0.0.1:6379",
+    "http://localhost:6379",
     "http://lms.paperlessquiz.com"
 ]
 CORS_ALLOW_CREDENTIALS = True
@@ -179,13 +180,24 @@ CORS_ALLOW_HEADERS = [
     "authorization"
 ]
 
-keys_file = os.path.join(BASE_DIR, 'aws_keys.txt')
+keys_file = os.path.join(BASE_DIR, 'openai_api_key.txt')
 
-LOGIN_REDIRECT_URL = 'http://localhost:3001/'
-EMAIL_BACKEND = 'django_ses.SESBackend'
-DEFAULT_FROM_EMAIL = 'hdbfinder2023ntu@gmail.com'
-AWS_REGION = 'us-east-1'
 with open(keys_file, 'r') as f:
     lines = f.readlines()
-    AWS_ACCESS_KEY_ID = lines[0].strip()
-    AWS_SECRET_ACCESS_KEY = lines[1].strip()
+    OPENAI_API_KEY = lines[0].strip()
+
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)],
+        },
+    },
+}
+
+ASGI_APPLICATION = 'app.asgi.application'
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'

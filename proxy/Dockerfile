@@ -1,4 +1,4 @@
-FROM nginxinc/nginx-unprivileged:1-alpine
+FROM ubuntu:latest
 LABEL mainter="nyanmawhtun@gmail.com"
 
 COPY ./default.conf.tpl /etc/nginx/default.conf.tpl
