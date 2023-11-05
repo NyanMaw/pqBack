@@ -1,4 +1,4 @@
-FROM python:3.9-alpine3.13
+FROM ubuntu:latest
 LABEL maintainer="nyanmawhtun@gmail.com"
 
 ENV DEBIAN_FRONTEND=noninteractive
