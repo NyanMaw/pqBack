@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     'core',
     'langchain',
     'openai',
-    'channels',
-    'channels_redis',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_spectacular',
@@ -188,16 +186,16 @@ with open(keys_file, 'r') as f:
 
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('redis', 6379)],
-        },
-    },
-}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('redis', 6379)],
+#         },
+#     },
+# }
 
-ASGI_APPLICATION = 'app.asgi.application'
+# ASGI_APPLICATION = 'app.asgi.application'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_URL = '/media/'

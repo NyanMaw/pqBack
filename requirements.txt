@@ -11,3 +11,4 @@ openai
 langchain
 pillow
 pytesseract
+uwsgi>=2.0.19<2.1
